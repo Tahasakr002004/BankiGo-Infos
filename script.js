@@ -43,3 +43,20 @@ const section1 = document.querySelector('#section--1');
 btnScrollTo.addEventListener('click', function (event) {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
+/**************************Task_2*********************************/
+// Using eventDelegation for more efficient smooth navigation
+//1.Add event Listener to common parent element
+//2.Delermine what element originated the event
+document
+  .querySelector('.nav__links')
+  .addEventListener('click', function (event) {
+    event.preventDefault();
+    const eventTarget = event.target;
+    //console.log( eventTarget );
+    // Matching strategy
+    if (eventTarget.classList.contains('nav__link')) {
+      const element_Id = eventTarget.getAttribute('href');
+      document.querySelector(element_Id).scrollIntoView({ behavior: 'smooth' });
+      console.log('scroll-Link');
+    }
+  });
