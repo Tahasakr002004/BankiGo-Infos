@@ -1,13 +1,15 @@
 'use strict';
-
 ///////////////////////////////////////
-// Modal window
-
-/***************************Task_1***************************/
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+///////////////////////////////////////
+
+/***************************Task_1***************************/
+// Modal window
 console.log(btnsOpenModal);
 const openModal = function (event) {
   event.preventDefault();
@@ -37,8 +39,6 @@ document.addEventListener('keydown', function (e) {
 });
 /**************************Task_1*********************************/
 // implementing Smooth Scrolling
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
 
 btnScrollTo.addEventListener('click', function (event) {
   section1.scrollIntoView({ behavior: 'smooth' });
@@ -60,3 +60,47 @@ document
       console.log('scroll-Link');
     }
   });
+
+/**************************Task_3*********************************/
+// .operations__tab--active {
+//   transform: translateY(-66%);
+// }
+// .operations__content {
+//   display: none;
+
+//   /* JUST PRESENTATIONAL */
+//   font-size: 1.7rem;
+//   padding: 2.5rem 7rem 6.5rem 7rem;
+// }
+
+// .operations__content--active {
+//   display: grid;
+//   grid-template-columns: 7rem 1fr;
+//   column-gap: 3rem;
+//   row-gap: 0.5rem;
+// }
+// Building a tabbed component
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+// using Event delegation
+tabsContainer.addEventListener('click', function (event) {
+  event.preventDefault();
+  const tabTarget = event.target.closest('.operations__tab');
+  // if (!tabTarget) return; // Gaurd clause
+  if (tabTarget) {
+    // remove activation
+    tabs.forEach(function (tab) {
+      tab.classList.remove('operations__tab--active');
+    });
+    tabsContent.forEach(function (content) {
+      content.classList.remove('operations__content--active');
+    });
+    // active tab and content
+    tabTarget.classList.add('operations__tab--active');
+    /////
+    document
+      .querySelector(`.operations__content--${tabTarget.dataset.tab}`)
+      .classList.add('operations__content--active');
+  }
+});
