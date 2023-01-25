@@ -6,6 +6,11 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+const nav = document.querySelector('.nav');
+const navLinks = document.querySelector('.nav__links');
 ///////////////////////////////////////
 
 /***************************Task_1***************************/
@@ -80,9 +85,7 @@ document
 //   row-gap: 0.5rem;
 // }
 // Building a tabbed component
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
+
 // using Event delegation
 tabsContainer.addEventListener('click', function (event) {
   event.preventDefault();
@@ -103,4 +106,28 @@ tabsContainer.addEventListener('click', function (event) {
       .querySelector(`.operations__content--${tabTarget.dataset.tab}`)
       .classList.add('operations__content--active');
   }
+});
+
+/**************************Task_4*********************************/
+// Passing Arguments to Event Handlers
+// Menu fade animation
+const handleHover = function (event, opacity) {
+  const linkTarget = event.target;
+  if (linkTarget.classList.contains('nav__link')) {
+    const siblings = linkTarget.closest('.nav').querySelectorAll('.nav__link');
+    const imgLogo = linkTarget.closest('.nav').querySelector('.nav__logo');
+    siblings.forEach(function (element) {
+      if (element !== linkTarget) {
+        element.style.opacity = opacity;
+        imgLogo.style.opacity = opacity;
+      }
+    });
+  }
+};
+// using anynomus function
+nav.addEventListener('mouseover', function (event) {
+  handleHover(event, 0.5);
+});
+nav.addEventListener('mouseout', function (event) {
+  handleHover(event, 1);
 });
