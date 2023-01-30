@@ -12,6 +12,7 @@ const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
 const navLinks = document.querySelector('.nav__links');
 const header = document.querySelector('.header');
+const allSections = document.querySelectorAll('.section');
 ///////////////////////////////////////
 
 /***************************Task_1***************************/
@@ -178,3 +179,32 @@ const obsOptions = {
 };
 const observer = new IntersectionObserver(obsCallback_func, obsOptions);
 observer.observe(header);
+
+/**************************Task_6*********************************/
+//Revealing sections/elements on scroll
+// .section--hidden {
+//   opacity: 0;
+//   transform: translateY(8rem);
+//  }
+const callbackReveal_Func = function (intersec_entries, observer) {
+  const intersec_entry = intersec_entries[0];
+  console.log(intersec_entry);
+  if (!intersec_entry.isIntersecting) return;
+  intersec_entry.target.classList.remove('section--hidden');
+  //then unobserve(entry.target)
+  observer.unobserve(intersec_entry.target); // for more performance
+};
+const revOptions = {
+  root: null,
+  threshold: 0.15,
+};
+const revealObserver = new IntersectionObserver(
+  callbackReveal_Func,
+  revOptions
+);
+allSections.forEach(function (sec_element) {
+  revealObserver.observe(sec_element);
+  sec_element.classList.add('section--hidden');
+});
+
+/**************************Task_7*********************************/
