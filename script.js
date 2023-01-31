@@ -14,6 +14,9 @@ const navLinks = document.querySelector('.nav__links');
 const header = document.querySelector('.header');
 const allSections = document.querySelectorAll('.section');
 const imgTargets = document.querySelectorAll('img[data-src]');
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
 
 ///////////////////////////////////////
 
@@ -241,4 +244,40 @@ const LoadsOptions = {
 const imgObserver = new IntersectionObserver(imgLoader_Func, LoadsOptions);
 imgTargets.forEach(function (element_img) {
   imgObserver.observe(element_img);
+});
+
+/**************************Task_8*********************************/
+// Builder a Slider Component: Part1
+// starting with Slides
+const maxSlide = slides.length - 1;
+let currentSlide = 0;
+slides.forEach(function (slide, index) {
+  // 0%, 100%, 200%, 300%
+  let calc = index * 100;
+  slide.style.transform = `translateX(${calc}%)`;
+});
+// Moving to Next to slide with btnRight
+btnRight.addEventListener('click', function (event) {
+  event.preventDefault();
+  currentSlide++;
+  slides.forEach(function (slide, index) {
+    let calc = index * 100;
+    if (currentSlide > maxSlide) {
+      currentSlide = 0;
+    }
+    slide.style.transform = `translateX(${calc - currentSlide * 100}%)`;
+  });
+});
+
+// Moving to previous slide with btnLeft
+btnLeft.addEventListener('click', function (event) {
+  event.preventDefault();
+  currentSlide--;
+  slides.forEach(function (slide, index) {
+    let calc = index * 100;
+    if (currentSlide < 0) {
+      currentSlide = maxSlide;
+    }
+    slide.style.transform = `translateX(${calc - currentSlide * 100}%)`;
+  });
 });
