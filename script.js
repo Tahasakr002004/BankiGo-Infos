@@ -13,6 +13,8 @@ const nav = document.querySelector('.nav');
 const navLinks = document.querySelector('.nav__links');
 const header = document.querySelector('.header');
 const allSections = document.querySelectorAll('.section');
+const imgTargets = document.querySelectorAll('img[data-src]');
+
 ///////////////////////////////////////
 
 /***************************Task_1***************************/
@@ -188,7 +190,7 @@ observer.observe(header);
 //  }
 const callbackReveal_Func = function (intersec_entries, observer) {
   const intersec_entry = intersec_entries[0];
-  console.log(intersec_entry);
+  // console.log(intersec_entry);
   if (!intersec_entry.isIntersecting) return;
   intersec_entry.target.classList.remove('section--hidden');
   //then unobserve(entry.target)
@@ -208,3 +210,35 @@ allSections.forEach(function (sec_element) {
 });
 
 /**************************Task_7*********************************/
+// implementing lazy loading images
+//1-select all img-element ,that only contain data-src attribute
+// const imgTargets = document.querySelectorAll('img[data-src]');
+
+//callback-function
+const imgLoader_Func = function (intersec_entries, observer) {
+  const intersec_entry = intersec_entries[0];
+  const entryTarget = intersec_entry.target;
+  if (!intersec_entry.isIntersecting) return;
+  console.log(intersec_entry);
+  //3- Replace img.src with img.dataset.src
+  entryTarget.src = entryTarget.dataset.src;
+  // 4- for loading Img this step is very important
+  // It says when img finishes loading, then remove class .lazy-img
+  // if you want test it , use Network tab in Devtool of google
+  //and change speed of internet
+  entryTarget.addEventListener('load', function () {
+    entryTarget.classList.remove('lazy-img');
+  });
+  observer.unobserve(entryTarget);
+};
+// LoadsOptions Obj
+const LoadsOptions = {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+};
+//2-observer
+const imgObserver = new IntersectionObserver(imgLoader_Func, LoadsOptions);
+imgTargets.forEach(function (element_img) {
+  imgObserver.observe(element_img);
+});
