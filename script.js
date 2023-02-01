@@ -17,7 +17,7 @@ const imgTargets = document.querySelectorAll('img[data-src]');
 const slides = document.querySelectorAll('.slide');
 const btnLeft = document.querySelector('.slider__btn--left');
 const btnRight = document.querySelector('.slider__btn--right');
-
+const dotsContainer = document.querySelector('.dots');
 ///////////////////////////////////////
 
 /***************************Task_1***************************/
@@ -247,37 +247,138 @@ imgTargets.forEach(function (element_img) {
 });
 
 /**************************Task_8*********************************/
-// Builder a Slider Component: Part1
-// starting with Slides
-const maxSlide = slides.length - 1;
-let currentSlide = 0;
-slides.forEach(function (slide, index) {
-  // 0%, 100%, 200%, 300%
-  let calc = index * 100;
-  slide.style.transform = `translateX(${calc}%)`;
-});
-// Moving to Next to slide with btnRight
-btnRight.addEventListener('click', function (event) {
-  event.preventDefault();
-  currentSlide++;
-  slides.forEach(function (slide, index) {
-    let calc = index * 100;
-    if (currentSlide > maxSlide) {
-      currentSlide = 0;
-    }
-    slide.style.transform = `translateX(${calc - currentSlide * 100}%)`;
+////////from Task_9 - build component part 2
+// this functiion for dot activation from task-9
+const dotActiv = function (slide = 0) {
+  document.querySelectorAll('.dots__dot').forEach(function (dot) {
+    dot.classList.remove('dots__dot--active');
   });
-});
+  const activeSlide = document.querySelector(
+    `.dots__dot[data-slide="${slide}"]`
+  );
+  activeSlide.classList.add('dots__dot--active');
+};
+const sliderPart_1 = function () {
+  ///////////
+  // Building a Slider Component: Part1
+  // starting with Slides
+  const maxSlide = slides.length - 1;
+  let currentSlide = 0;
+  slides.forEach(function (slide, index) {
+    // 0%, 100%, 200%, 300%
+    let calc = index * 100;
+    slide.style.transform = `translateX(${calc}%)`;
+  });
 
-// Moving to previous slide with btnLeft
-btnLeft.addEventListener('click', function (event) {
-  event.preventDefault();
-  currentSlide--;
-  slides.forEach(function (slide, index) {
-    let calc = index * 100;
-    if (currentSlide < 0) {
-      currentSlide = maxSlide;
-    }
-    slide.style.transform = `translateX(${calc - currentSlide * 100}%)`;
+  // Moving to Next to slide with btnRight
+  const moveToNext = function () {
+    currentSlide++;
+    slides.forEach(function (slide, index) {
+      let calc = index * 100;
+      if (currentSlide > maxSlide) {
+        currentSlide = 0;
+      }
+      slide.style.transform = `translateX(${calc - currentSlide * 100}%)`;
+    });
+    dotActiv(currentSlide);
+  };
+
+  // Moving to previous slide with btnLeft
+  const moveToPrev = function () {
+    currentSlide--;
+    slides.forEach(function (slide, index) {
+      let calc = index * 100;
+      if (currentSlide < 0) {
+        currentSlide = maxSlide;
+      }
+      slide.style.transform = `translateX(${calc - currentSlide * 100}%)`;
+    });
+    dotActiv(currentSlide);
+  };
+
+  btnRight.addEventListener('click', moveToNext);
+  btnLeft.addEventListener('click', moveToPrev);
+  //// attaching addEvent-handler to arrowkey in keyboard
+  document.addEventListener('keydown', function (event) {
+    console.log(event.key); // press any arrowkey in keyboard
+    if (event.key === 'ArrowRight') moveToNext();
+    if (event.key === 'ArrowLeft') moveToPrev();
   });
-});
+};
+sliderPart_1();
+/**************************Task_9*********************************/
+// Building slider component(part2)
+/** 
+ * // reference to cssStyle of dots
+ * .dots {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+.dots__dot {
+  border: none;
+  background-color: #b9b9b9;
+  opacity: 0.7;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  margin-right: 1.75rem;
+  cursor: pointer;
+  transition: all 0.5s;
+
+  // Only necessary when overlying images 
+  // /box-shadow: 0 0.6rem 1.5rem rgba(0, 0, 0, 0.7);/ 
+}
+
+.dots__dot:last-child {
+  margin: 0;
+}
+
+.dots__dot--active {
+//  background-color: #fff;
+  background-color: #888;
+  opacity: 1;
+}
+ */
+const sliderPart_2 = function () {
+  //Starting with adding dots for each slide
+  // helpful functons
+  const moveTo = function (slide) {
+    slides.forEach(function (s, index) {
+      let calc = index * 100;
+      if (slide < 0) {
+        slide = maxSlide;
+      }
+      s.style.transform = `translateX(${calc - slide * 100}%)`;
+    });
+  };
+  const addDots_Func = function () {
+    slides.forEach(function (slide, index) {
+      dotsContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${index}">
+      </button>`
+      );
+    });
+  };
+  const initDots = function () {
+    addDots_Func();
+    // set it to 0 for first slide at the begining
+    dotActiv(0);
+  };
+  initDots();
+  // using delegtion way
+  dotsContainer.addEventListener('click', function (event) {
+    event.preventDefault();
+    const eventTarget = event.target;
+    console.log(eventTarget);
+    if (eventTarget.classList.contains('dots__dot')) {
+      const slide = eventTarget.dataset.slide;
+      moveTo(slide);
+      dotActiv(slide);
+    }
+  });
+};
+sliderPart_2();
