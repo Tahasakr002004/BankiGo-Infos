@@ -382,3 +382,7 @@ const sliderPart_2 = function () {
   });
 };
 sliderPart_2();
+
+/**************************Task_10*********************************/
+// Efficent script loading and executing with defer <script></script>
+// finishing my project
